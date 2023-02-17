@@ -13,9 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -254,60 +254,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void loginUser(final String email, final String password) {
         // Tag used to cancel the request
         String cancel_req_tag = "login";
+        Intent intent = new Intent(
+                LoginActivity.this,
+                MainActivity.class);
+        intent.putExtra("email", email);
+        startActivity(intent);
+        finish();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_FOR_LOGIN,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "Register Response: " + response.toString());
-                        showProgress(false);
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            boolean error = jObj.getBoolean("error");
-
-                            if (!error) {
-                                // Launch Main activity
-                                Intent intent = new Intent(
-                                        LoginActivity.this,
-                                        MainActivity.class);
-                                intent.putExtra("email", email);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                String errorMsg = jObj.getString("error_msg");
-                                Toast.makeText(getApplicationContext(),
-                                        errorMsg, Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                showProgress(false);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
-
-        // set timeout
-        strReq.setRetryPolicy(new DefaultRetryPolicy(20000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        // Adding request to request queue
-        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq, cancel_req_tag);
 
     }
 

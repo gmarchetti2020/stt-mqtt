@@ -10,20 +10,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+/*import org.eclipse.paho.android.service.MqttAndroidClient;*/
+import info.mqtt.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Date;
 
 public class MqttMessageService extends Service {
 
@@ -82,11 +81,11 @@ public class MqttMessageService extends Service {
             @Override
             public void connectionLost(Throwable throwable) {
                 setMessageNotification("debug", "service: connection lost");
-                try {
+                //try {
                     mqttAndroidClient.connect(pahoMqttClient.getMqttConnectionOption());
-                } catch (MqttException e) {
+                /*} catch (MqttException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
 
             @Override
@@ -139,7 +138,7 @@ public class MqttMessageService extends Service {
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

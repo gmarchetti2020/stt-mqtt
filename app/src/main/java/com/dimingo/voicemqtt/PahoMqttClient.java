@@ -1,10 +1,13 @@
 package com.dimingo.voicemqtt;
 
+import static info.mqtt.android.service.Ack.AUTO_ACK;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+/*import org.eclipse.paho.android.service.MqttAndroidClient;*/
+import info.mqtt.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -25,8 +28,8 @@ public class PahoMqttClient {
 
     public MqttAndroidClient getMqttClient(Context context, String brokerUrl, String clientId) {
 
-        mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, clientId);
-        try {
+        mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, clientId, AUTO_ACK);
+        //try {
             IMqttToken token = mqttAndroidClient.connect(getMqttConnectionOption());
             token.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -40,9 +43,9 @@ public class PahoMqttClient {
                     Log.d(TAG, "Failure " + exception.toString());
                 }
             });
-        } catch (MqttException e) {
+        /*} catch (MqttException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return mqttAndroidClient;
     }

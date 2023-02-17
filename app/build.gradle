@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdk 33
     defaultConfig {
         applicationId "com.dimingo.voicemqtt"
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdk 31
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -17,21 +16,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.dimingo.voicemqtt'
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile files('libs/org.eclipse.paho.android.service-1.1.1.jar')
-    compile files('libs/org.eclipse.paho.client.mqttv3-1.1.1.jar')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'org.greenrobot:eventbus:3.1.1'
-    compile 'com.android.volley:volley:1.1.0'
 
-    compile 'com.android.support:design:25.3.1'
-    testCompile 'junit:junit:4.12'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+
+    //new mqtt library that supports android 12
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.hannesa2:paho.mqtt.android:3.5.1'
+    //implementation files('libs/serviceLibrary-release.aar')
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.android.volley:volley:1.2.1'
+
+    implementation 'com.google.android.material:material:1.8.0'
+
+    implementation 'androidx.work:work-runtime:2.8.0'
+
+    testImplementation 'junit:junit:4.12'
 }
